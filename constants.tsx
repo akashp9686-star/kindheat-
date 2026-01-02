@@ -6,6 +6,7 @@ export const MOCK_ORPHANAGES: Orphanage[] = [
     id: 'o1',
     name: 'Sunnyvale Sanctuary',
     location: 'Bangalore, KA',
+    email: 'contact@sunnyvale.org',
     image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=400',
     description: 'Specializing in early childhood care and primary education.'
   },
@@ -13,6 +14,7 @@ export const MOCK_ORPHANAGES: Orphanage[] = [
     id: 'o2',
     name: 'Grace Haven Home',
     location: 'Mumbai, MH',
+    email: 'hello@gracehaven.org',
     image: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=400',
     description: 'Providing a safe environment and vocational training for teenagers.'
   },
@@ -20,6 +22,7 @@ export const MOCK_ORPHANAGES: Orphanage[] = [
     id: 'o3',
     name: 'Hope Springs Center',
     location: 'Delhi, NCR',
+    email: 'info@hopesprings.center',
     image: 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&q=80&w=400',
     description: 'A holistic care center with on-site medical facilities.'
   }

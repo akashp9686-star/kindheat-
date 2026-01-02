@@ -17,6 +17,7 @@ export interface Orphanage {
   id: string;
   name: string;
   location: string;
+  email?: string;
   distance?: string;
   image: string;
   description: string;
