@@ -105,6 +105,7 @@ KindHeart Platform Team
   const handleFindNearby = () => {
     setIsFindingNearby(true);
     setNearbyResults([]);
+    setError(null);
     
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
@@ -118,19 +119,28 @@ KindHeart Platform Team
           const { latitude, longitude } = position.coords;
           const result = await findNearbyOrphanages(latitude, longitude);
           
-          const simulatedResults = [
-            { name: "Local Hope Center", location: "2.4 km away" },
-            { name: "City Children's Home", location: "4.1 km away" }
-          ];
-          setNearbyResults(simulatedResults);
+          // Extract URLs from groundingChunks as required by Gemini API guidelines.
+          const mapsResults = (result.sources as any[])
+            .filter(chunk => chunk.maps)
+            .map(chunk => ({
+              name: chunk.maps.title || "Nearby Sanctuary",
+              location: chunk.maps.uri || "#"
+            }));
+
+          if (mapsResults.length > 0) {
+            setNearbyResults(mapsResults);
+          } else {
+            setError("No specific orphanages identified nearby via Maps grounding.");
+          }
         } catch (err) {
-          setError("Could not find nearby orphanages at this time.");
+          console.error(err);
+          setError("Could not complete nearby search. Please try again.");
         } finally {
           setIsFindingNearby(false);
         }
       },
       () => {
-        setError("Location access denied.");
+        setError("Location access denied. Please enable location to find nearby orphanages.");
         setIsFindingNearby(false);
       }
     );
@@ -243,18 +253,31 @@ KindHeart Platform Team
                     
                     {nearbyResults.length > 0 && (
                       <div className="bg-indigo-50 p-4 rounded-2xl animate-slide-in border border-indigo-100">
-                        <p className="text-[10px] font-bold text-indigo-400 uppercase mb-2">Nearby Suggestions</p>
-                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                        <p className="text-[10px] font-bold text-indigo-400 uppercase mb-2">Nearby Sanctuary Suggestions</p>
+                        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                           {nearbyResults.map((res, idx) => (
-                            <button 
+                            <div 
                               key={idx}
-                              type="button"
-                              onClick={() => setSelectedOrphanageId(res.name)}
-                              className="whitespace-nowrap bg-white px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 shadow-sm border border-indigo-100 hover:border-indigo-400 transition-all"
+                              className="whitespace-nowrap bg-white px-4 py-3 rounded-xl shadow-sm border border-indigo-100 flex flex-col gap-1 min-w-[140px]"
                             >
-                              <div className="text-indigo-600">{res.name}</div>
-                              <div className="text-[9px] text-slate-400">{res.location}</div>
-                            </button>
+                              <button 
+                                type="button"
+                                onClick={() => setSelectedOrphanageId(res.name)}
+                                className="text-left"
+                              >
+                                <div className="text-indigo-600 font-bold text-xs hover:underline decoration-indigo-200">{res.name}</div>
+                              </button>
+                              <a 
+                                href={res.location} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-[9px] text-slate-400 hover:text-indigo-500 transition-colors flex items-center gap-1"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <i className="fas fa-external-link-alt text-[8px]"></i>
+                                View on Maps
+                              </a>
+                            </div>
                           ))}
                         </div>
                       </div>

@@ -1,7 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always use process.env.API_KEY directly as per GenAI coding guidelines.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const SYSTEM_INSTRUCTION = `
 You are KindHeart AI, the helpful assistant for the KindHeart Orphanage and Adoption Platform.
@@ -26,6 +27,7 @@ export async function getAIChatResponse(prompt: string) {
         temperature: 0.7,
       },
     });
+    // Property .text is a getter, do not call as a method.
     return response.text || "I'm sorry, I couldn't process that request right now.";
   } catch (error) {
     console.error("Gemini API Error:", error);
@@ -48,7 +50,7 @@ export async function findNearbyOrphanages(lat: number, lng: number) {
       },
     });
     
-    // Return both the text response and any grounding sources if available
+    // Return both the text response and grounding sources as required for Maps grounding.
     return {
       text: response.text,
       sources: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
