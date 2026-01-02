@@ -1,0 +1,9 @@
+{
+  "name": "Copy of KindHeart Orphanage & Adoption Portal",
+  "description": "A comprehensive platform connecting compassionate individuals with orphanages, facilitating adoption inquiries, managing secure donations, and providing AI-driven guidance for a seamless humanitarian experience.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
